@@ -1,0 +1,222 @@
+void idct (xout, xfrm, wValuesPerRow)
+BYTE FAR *xout;
+int FAR   *xfrm;
+WORD      wValuesPerRow;
+{
+    long   i, j, p;
+    long            k, k0[8];
+    long            a;
+
+    int   FAR *xTmpFrm;
+  
+    long FAR *lpxTmpOut;
+
+    #define   ilong int  
+
+    ilong           k10, k11, k12, k13, k14, k15, k16, k17, k20, 
+                    k21, k22, k23, k24, k25, k26, k27, k30, k31, k32, k33, 
+                    k34, k35, k36, k37, k44, k45, k46, k47; 
+
+
+    ilong            c1p4 = 23; 
+    ilong            c1p8 = 30; 
+    ilong            s1p8 = 12; 
+    ilong            c1p16 = 31; 
+    ilong            s1p16 = 6; 
+    ilong            c3p16 = 27; 
+    ilong            s3p16 = 18; 
+    ilong            norm = 32;
+
+    /* 1-dimensional transform on rows */
+
+
+    lpxTmpOut = (int FAR *) lpXFRMBuf;
+    xTmpFrm = (long FAR *) xfrm;
+
+    p = 0;
+    for (i = 0; i < 8; ++i) 
+    {
+
+//      k30 = xTmpFrm[p] << 3;
+//      k31 = xTmpFrm[p + 4] << 3;
+//      k32 = xTmpFrm[p + 2] << 3;
+//      k33 = xTmpFrm[p + 6] << 3;
+//      k44 = xTmpFrm[p + 1] << 3;
+//      k45 = xTmpFrm[p + 5] << 3;
+//      k46 = xTmpFrm[p + 3] << 3;
+//      k47 = xTmpFrm[p + 7] << 3;    
+
+        k30 = xTmpFrm[p];
+        k31 = xTmpFrm[p + 4];
+        k32 = xTmpFrm[p + 2];
+        k33 = xTmpFrm[p + 6];
+        k44 = xTmpFrm[p + 1];
+        k45 = xTmpFrm[p + 5];
+        k46 = xTmpFrm[p + 3];
+        k47 = xTmpFrm[p + 7];
+
+
+        k34 = (s1p16 * k44 - c1p16 * k47) / norm;
+        k35 = (c3p16 * k45 - s3p16 * k46) / norm;
+        k36 = (s3p16 * k45 + c3p16 * k46) / norm;
+        k37 = (c1p16 * k44 + s1p16 * k47) / norm;
+
+        k20 = c1p4 * (k30 + k31) / norm;
+        k21 = c1p4 * (k30 - k31) / norm;
+        k22 = (s1p8 * k32 - c1p8 * k33) / norm;
+        k23 = (c1p8 * k32 + s1p8 * k33) / norm;
+        k24 = k34 + k35;
+        k25 = k34 - k35;
+        k26 = k37 - k36;
+        k27 = k37 + k36;
+
+        k10 = k20 + k23;
+        k11 = k21 + k22;
+        k12 = k21 - k22;
+        k13 = k20 - k23;
+        k14 = k24;
+        k15 = c1p4 * (k26 - k25) / norm;
+        k16 = c1p4 * (k26 + k25) / norm;
+        k17 = k27;
+
+        lpxTmpOut[p] = k10 + k17;
+        lpxTmpOut[p + 1] = k11 + k16;
+        lpxTmpOut[p + 2] = k12 + k15;
+        lpxTmpOut[p + 3] = k13 + k14;
+        lpxTmpOut[p + 4] = k13 - k14;
+        lpxTmpOut[p + 5] = k12 - k15;
+        lpxTmpOut[p + 6] = k11 - k16;
+        lpxTmpOut[p + 7] = k10 - k17;
+
+        lpxTmpOut[p]     <<= 3;
+        lpxTmpOut[p + 1] <<= 3;
+        lpxTmpOut[p + 2] <<= 3;
+        lpxTmpOut[p + 3] <<= 3;
+        lpxTmpOut[p + 4] <<= 3;
+        lpxTmpOut[p + 5] <<= 3;
+        lpxTmpOut[p + 6] <<= 3;
+        lpxTmpOut[p + 7] <<= 3;
+
+
+
+
+
+  
+        p += wValuesPerRow;
+    }
+
+    /* 1-dimensional transform on columns */
+    for (j = 0; j < 8; ++j) {
+
+
+        k30 = lpxTmpOut[j];
+        k31 = lpxTmpOut[j + (4 * wValuesPerRow)];
+        k32 = lpxTmpOut[j + (2 * wValuesPerRow)];
+        k33 = lpxTmpOut[j + (6 * wValuesPerRow)];
+        k44 = lpxTmpOut[j + (wValuesPerRow)];
+        k45 = lpxTmpOut[j + (5 * wValuesPerRow)];
+        k46 = lpxTmpOut[j + (3 * wValuesPerRow)];
+        k47 = lpxTmpOut[j + (7 * wValuesPerRow)];   
+
+
+//      k34 = (s1p16 * k44) - c1p16 * k47) / norm;
+//      k35 = (c3p16 * k45 - s3p16 * k46) / norm;
+//      k36 = (s3p16 * k45 + c3p16 * k46) / norm;
+//      k37 = (c1p16 * k44 + s1p16 * k47) / norm;
+
+        k34 = (s1p16 * (k44 >> 2) - c1p16 * (k47 >> 2)) / (norm >> 2);
+        k35 = (c3p16 * (k45 >> 2) - s3p16 * (k46 >> 2)) / (norm >> 2);
+        k36 = (s3p16 * (k45 >> 2) + c3p16 * (k46 >> 2)) / (norm >> 2);
+        k37 = (c1p16 * (k44 >> 2) + s1p16 * (k47 >> 2)) / (norm >> 2);
+
+
+//      k20 = c1p4 * (k30 + k31) / norm;
+//      k21 = c1p4 * (k30 - k31) / norm;
+//      k22 = (s1p8 * k32 - c1p8 * k33) / norm;
+//      k23 = (c1p8 * k32 + s1p8 * k33) / norm;
+
+
+        k20 = c1p4 * ((k30 >> 2) + (k31 >> 2)) / (norm >> 2);
+        k21 = c1p4 * ((k30 >> 2) - (k31 >> 2)) / (norm >> 2);
+        k22 = (s1p8 * (k32 >> 2) - c1p8 * (k33 >> 2)) / (norm >> 2);
+        k23 = (c1p8 * (k32 >> 2) + s1p8 * (k33 >> 2)) / (norm >> 2);
+
+
+        k24 = k34 + k35;
+        k25 = k34 - k35;
+        k26 = k37 - k36;
+        k27 = k37 + k36;
+
+        k10 = k20 + k23;
+        k11 = k21 + k22;
+        k12 = k21 - k22;
+        k13 = k20 - k23;
+        k14 = k24;
+
+//      k15 = c1p4 * (k26 - k25) / norm;
+//      k16 = c1p4 * (k26 + k25) / norm;
+
+        k15 = c1p4 * ((k26 >> 2) - (k25 >> 2)) / (norm >> 2);
+        k16 = c1p4 * ((k26 >> 2) + (k25 >> 2)) / (norm >> 2); 
+
+
+        k17 = k27;
+
+        k0[0] = k10 + k17;
+        k0[1] = k11 + k16;
+        k0[2] = k12 + k15;
+        k0[3] = k13 + k14;
+        k0[4] = k13 - k14;
+        k0[5] = k12 - k15;
+        k0[6] = k11 - k16;
+        k0[7] = k10 - k17;   
+
+
+
+
+        p = j;
+        for (i = 0; i < 8; ++i) 
+        {
+            if (k0[i] < 0) 
+            {
+                k = (k0[i] - 16) / 32 + 128;
+                if (k < 0)
+                    k = 0;
+            } 
+            else 
+            {
+                k = (k0[i] + 16) / 32 + 128;
+                if (k > 255)
+                    k = 255;
+            }
+            lpxTmpOut[p] = k;
+
+            p += wValuesPerRow;
+        }
+    }
+
+
+    {
+
+
+        for (i = 0; i < 8; i++)
+        {
+
+            for (j = 0; j < 8; j++)
+               xout [j] = lpxTmpOut[j];
+
+            xout    += wValuesPerRow;
+            lpxTmpOut += wValuesPerRow;
+
+        }
+
+    }
+
+
+
+
+
+}
+
+
+ 

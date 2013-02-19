@@ -1,0 +1,13 @@
+
+void DecodeRLE2_A (LPSTR, LPSTR, WORD); 
+
+void PlanesToTriplets_A (LPSTR, LPSTR, WORD, WORD);
+
+void DeAvgCr_A (LPSTR, LPSTR, WORD);
+
+void BlkToStrL_A (LPSTR, LPSTR, WORD, WORD);
+
+void BlkToStrCr_A (LPSTR, LPSTR, WORD, WORD);
+
+void DeQuantizeBlock_A (LPSTR, LPSTR, BOOL);
+

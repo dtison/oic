@@ -1,0 +1,11 @@
+.c.obj:
+  cl -c -AM -W2 -Zi -Zpe $*.c
+
+unsquash.obj: unsquash.c
+  cl -c -AM -W2 -Zi -Od -Zpe unsquash.c
+
+
+unsquash.exe: unsquash.obj  oic.lib
+# link /NOD /NOE     /ST:4096 unsquash,,, mlibce oic cpifmt cpi win_em;
+  link /NOD /NOE /co /ST:4096 unsquash,,, mlibce oic cpifmt cpi win_em;
+

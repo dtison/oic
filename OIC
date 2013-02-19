@@ -1,0 +1,101 @@
+#       OIC  Make File
+#
+
+
+#Put your own path specs here
+
+INCPATH=f:\cpiinc
+LIBPATH=f:\cpilib
+
+PROG          = OIC
+OBJDIR        = .
+INCLUDE       = .
+CC            = cl -nologo -c -W3 -AM -G2sw -Zpe 
+CFLAGS        = -Oas 
+CFLAGSD       = -Od -Zi -DDEBUG 
+CFLAGSO       = -Ocilgt
+ASM           = masm -W2 -Ml -Mx
+AFLAGS        =
+AFLAGSD       = -Zi
+LINK          = link /NOD/NOE/AL:16
+LFLAGS        = 
+LFLAGSD       = /CO/INC/PADCODE:256
+
+.c.obj:
+  $(CC) $(CFLAGS) $*.c
+
+$(INCPATH)\oic.h: oic.h
+    copy oic.h $(INCPATH)
+
+
+oicdata.obj: oicdata.c
+  cl -nologo -c -W3 -AM -G2sw -Zpe -Oas -NT OIC_TEXT oicdata.c
+  lib oic -+ oicdata;
+
+# OIC section
+
+trip2pla.obj: trip2pla.asm
+  masm       -DSEGNAME=OIC_TEXT trip2pla;
+  lib oic -+ trip2pla;
+
+rgb2ycr.obj: rgb2ycr.asm
+  masm       -DSEGNAME=OIC_TEXT rgb2ycr;
+  lib oic -+ rgb2ycr;
+
+avgcr.obj: avgcr.asm
+  masm       -DSEGNAME=OIC_TEXT avgcr;
+  lib oic -+ avgcr;
+
+str2blk.obj: str2blk.asm
+  masm       -DSEGNAME=OIC_TEXT str2blk;
+  lib oic -+ str2blk;
+
+fdct.obj: fdct.asm
+  masm       -DSEGNAME=OIC_TEXT fdct;
+  lib oic -+ fdct;
+
+encrle.obj: encrle.asm
+  masm       -DSEGNAME=OIC_TEXT encrle;
+  lib oic -+ encrle;
+
+oic.obj: oic.c
+  cl -nologo -c -W3 -AM -G2sw -Zpe -Ocilgt -NT OIC_TEXT oic.c
+# cl -nologo -c -W3 -AM -G2sw -Zpe -Od -Zi -NT OIC_TEXT oic.c
+  lib oic -+ oic;
+
+oicutil.obj: oicutil.c
+  cl -nologo -c -W3 -AM -G2sw -Zpe -Oas -NT OIC_TEXT oicutil.c
+  lib oic -+ oicutil;
+
+
+# Un-OIC section
+
+dequant.obj: dequant.asm
+  masm       -DSEGNAME=OIC_TEXT dequant;
+  lib oic -+ dequant;
+
+decrle.obj: decrle.asm
+  masm       -DSEGNAME=OIC_TEXT decrle;
+  lib oic -+ decrle;
+
+blk2str.obj: blk2str.asm
+  masm       -DSEGNAME=OIC_TEXT blk2str;
+  lib oic -+ blk2str;
+
+deavgcr.obj: deavgcr.asm
+  masm       -DSEGNAME=OIC_TEXT deavgcr;
+  lib oic -+ deavgcr;
+
+plan2tri.obj: plan2tri.asm
+  masm       -DSEGNAME=OIC_TEXT plan2tri;
+  lib oic -+ plan2tri;
+
+unoic.obj: unoic.c
+  cl -nologo -c -W3 -AM -G2sw -Zpe -Ocilgt -NT OIC_TEXT unoic.c
+# cl -nologo -c -W3 -AM -G2sw -Zpe -Od     -Zi -NT OIC_TEXT unoic.c
+  lib oic -+ unoic;
+
+
+$(LIBPATH)\oic.lib: oic.lib
+    copy oic.lib $(LIBPATH)
+

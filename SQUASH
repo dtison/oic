@@ -1,0 +1,10 @@
+
+squash.obj: squash.c
+  cl -c -AM -W2 -Zi -Zpe -Od squash.c
+
+
+squash.exe: squash.obj oic.lib
+  link /NOE /co /ST:4096 squash,,,oic cpifmt cpi win_em;
+# link /NOE     /ST:4096 squash,,,oic cpifmt cpi win_em;
+
+

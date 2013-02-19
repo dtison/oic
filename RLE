@@ -1,0 +1,132 @@
+
+/*  Word oriented run length encoder  */ 
+
+EncodeRLE (lpDest, lpSource, wNumBytes, wCompressedBytes)
+LPSTR lpDest;
+WORD  FAR *lpSource;
+WORD  wNumBytes;
+WORD  *wCompressedBytes;
+{
+
+
+    WORD  CurrVal;
+    WORD  NextVal;
+
+    int   i;
+    RLE   RLEPacket; 
+    char  *PacketPtr;
+
+
+    WORD  CurrRunCount;
+    BOOL  bNeedNewPacket;
+    WORD  wRLEByteCount;
+    WORD  wNumVals;
+
+    BOOL  bIsPending;
+    BOOL  bIsGreater;
+    WORD  wVals;
+
+    wNumVals = wNumBytes >> 1;
+
+
+    CurrVal         = *lpSource++;
+    CurrRunCount    = 1;
+    bNeedNewPacket  = FALSE; 
+    wRLEByteCount   = 0;
+    wVals           = 1; 
+
+
+    do
+    {
+
+
+        NextVal = *lpSource++;
+        wVals++;
+
+        bIsPending = FALSE;
+        bIsGreater = FALSE;
+
+        if (NextVal == CurrVal)
+        {
+            CurrRunCount++;
+            if (CurrRunCount == 255)
+            {
+                bNeedNewPacket = TRUE;
+                bIsGreater = TRUE;
+                printf ("IsGreater: \n");
+            }
+
+
+        
+        }
+        else
+            bNeedNewPacket = TRUE;
+
+
+        if (bNeedNewPacket)
+        {
+            /*  Store old run packet  */
+            RLEPacket.Count = CurrRunCount; 
+            RLEPacket.Value = CurrVal;
+
+            PacketPtr   = (char *) &RLEPacket;
+ 
+            *lpDest++ = *PacketPtr++;
+            *lpDest++ = *PacketPtr++;
+            *lpDest++ = *PacketPtr;
+
+
+                if (wVals == wNumVals)
+                    printf ("equal\n");
+
+
+
+            if (! bIsGreater)
+                CurrVal         = NextVal;
+            else
+            {
+
+                CurrVal = *lpSource++;
+                wVals++;
+            } 
+
+
+            CurrRunCount    = 1;
+            bNeedNewPacket  = FALSE;
+            wRLEByteCount   += 3;
+
+            bIsPending = TRUE;
+
+        }
+    } while (wVals < wNumVals);
+
+
+
+//  if (bIsPending || CurrRunCount > 1)
+//  if (CurrRunCount > 1)
+    if (CurrVal == NextVal)
+    {
+            /*  Store pending run packet  */
+            RLEPacket.Count = CurrRunCount; 
+            RLEPacket.Value = CurrVal;
+
+            PacketPtr   = (char *) &RLEPacket;
+ 
+            *lpDest++ = *PacketPtr++;
+            *lpDest++ = *PacketPtr++;
+            *lpDest++ = *PacketPtr;
+            wRLEByteCount   += 3;
+
+            printf ("one more\n");
+    }
+
+
+          printf ("Pending: %d\n",bIsPending);
+
+    *wCompressedBytes = wRLEByteCount;
+
+}
+
+
+
+

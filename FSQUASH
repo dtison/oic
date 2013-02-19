@@ -1,0 +1,58 @@
+
+trip2pla.obj: trip2pla.asm
+  masm -Zi trip2pla;
+  lib msquash -+ trip2pla;
+
+rgb2ycr.obj: rgb2ycr.asm
+  masm -Zi rgb2ycr;
+  lib msquash -+ rgb2ycr;
+
+medlstr.obj: medlstr.asm
+  masm -Zi medlstr;
+  lib msquash -+ medlstr;
+
+avgcr.obj: avgcr.asm
+  masm -Zi avgcr;
+  lib msquash -+ avgcr;
+
+str2blk.obj: str2blk.asm
+  masm -Zi str2blk;
+  lib msquash -+ str2blk;
+
+lookupco.obj: lookupco.asm
+  masm -Zi lookupco;
+  lib msquash -+ lookupco;
+
+addcode.obj: addcode.asm
+  masm -Zi addcode;
+  lib msquash -+ addcode;
+
+writecod.obj: writecod.asm
+  masm -Zi writecod;
+  lib msquash -+ writecod;
+
+fdct.obj: fdct.asm
+  masm -Zi fdct;
+  lib msquash -+ fdct;
+
+encrle.obj: encrle.asm
+  masm -Zi encrle;
+  lib msquash -+ encrle;
+
+
+squash.obj: squash.c
+  cl -c -AM -W2 -Zi -Zpe -Ox -NT SQUASH_TEXT squash.c
+
+complz.obj: complz.c
+  cl -c -AM -W2 -Zi -Zpe -NT SQUASH_TEXT complz.c
+
+msutil.obj: msutil.c
+  cl -c -AM -W2 -Zi -Zpe msutil.c
+
+
+
+squash.exe: squash.obj complz.obj msutil.obj msquash.lib
+# c:\c\bin\link /co /ST:4096 squash complz msutil,,,msquash;
+  link /co /ST:4096 squash complz msutil,,,msquash;
+
+

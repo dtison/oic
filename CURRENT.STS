@@ -1,0 +1,22 @@
+[shared-]
+	pmark="D:\OIC\cpi\lzw\decomplz.c" 263 1
+	mark=cv "D:\OIC\unsquash.c" 232 1 'E "unsquash.c"!.232
+	mark=cv "D:\OIC\unoic.c" 131 1 'E "unoic.c"!.131
+	mark=cv "D:\OIC\cpi\lzw\decomplz.c" 250 1 'E "decomplz.c"!.250
+	version=2
+[debug-]
+	target="d:\oic\unsquash.exe"
+	watch=i'00257
+	watch=nDiff'00257
+	watch=nBufCount'00257
+	watch=lpStack'00257
+	watch=stackptr'00257
+[cv]
+	wndstate=0 0 1 2 0 0 0 0 0 1 254
+	tilestate=1 24 0 80 0 0 0 0 0 7 0 0 0 0 21 0 0 254
+	command=use auto
+	command=n10
+	command=s1
+	command=oc+
+	command=of+
+	command=o3-

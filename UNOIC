@@ -1,0 +1,25 @@
+
+dequant.obj: dequant.asm
+  masm -Zi dequant;
+  lib oic -+ dequant;
+
+decrle.obj: decrle.asm
+  masm -Zi decrle;
+  lib oic -+ decrle;
+
+blk2str.obj: blk2str.asm
+  masm -Zi blk2str;
+  lib oic -+ blk2str;
+
+deavgcr.obj: deavgcr.asm
+  masm -Zi deavgcr;
+  lib oic -+ deavgcr;
+
+plan2tri.obj: plan2tri.asm
+  masm -Zi plan2tri;
+  lib oic -+ plan2tri;
+
+unoic.obj: unoic.c
+  cl -c -AM -W2 -Zi -Zpe -Od -NT OIC_TEXT unoic.c
+  lib oic -+ unoic;
+

@@ -1,0 +1,39 @@
+.c.obj:
+  cl -c -AM -W2 -Zi -Zpe $*.c
+
+unsquash.obj: unsquash.c
+  cl -c -AM -W2 -Zi -Ox -Zpe unsquash.c
+
+decomplz.obj: decomplz.c
+  cl -c -AM -W2 -Zi -Zpe decomplz.c
+
+
+msutil.obj: msutil.c
+  cl -c -AM -W2 -Zi -Zpe msutil.c
+
+dequant.obj: dequant.asm
+  masm -Zi dequant;
+  lib msquash -+ dequant;
+
+decrle.obj: decrle.asm
+  masm -Zi decrle;
+  lib msquash -+ decrle;
+
+blk2str.obj: blk2str.asm
+  masm -Zi blk2str;
+  lib msquash -+ blk2str;
+
+deavgcr.obj: deavgcr.asm
+  masm -Zi deavgcr;
+  lib msquash -+ deavgcr;
+
+plan2tri.obj: plan2tri.asm
+  masm -Zi plan2tri;
+  lib msquash -+ plan2tri;
+
+
+unsquash.exe: unsquash.obj decomplz.obj msutil.obj msquash.lib
+# c:\c\bin\link /co /ST:4096 unsquash decomplz msutil,,,msquash
+ link /co /ST:4096 unsquash decomplz msutil,,,msquash
+
+

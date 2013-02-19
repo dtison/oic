@@ -1,0 +1,13 @@
+            char Message [80];
+            int  Percent;
+            WORD  percentage;
+
+            wsprintf ((LPSTR) Message, " Decompressed %d percent",(((i + 1) * 100) / wBlocksPerColumn));
+
+            percentage =  ((i + 1) * 100) / wBlocksPerColumn;  
+
+
+//            SendMessage( hWndSquash, MSG_SAVE_PERCENT, percentage, 0L );
+
+//            SetWindowText (hWndIP, (LPSTR) Message);
+
